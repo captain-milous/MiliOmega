@@ -4,20 +4,45 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MiliOmega
 {
     public class Sifra
     {
-        private string rawText;
-        private string unencryptedText;
-        private string encryptedText;
-        private string? key;
+        protected string rawText;
+        protected string unencryptedText;
+        protected string encryptedText;
+        protected string? key;
 
         public string RawText { get { return rawText; } set { rawText = value; } }
-        public string UnencryptedText { get { return unencryptedText; } set { unencryptedText = value;  } }
-        public string EncryptedText { get { return encryptedText; } set { encryptedText = value; } }
-        public string? Key { get { return key; } set { key = value; } }
+        public string UnencryptedText 
+        { 
+            get { return unencryptedText; } 
+            set 
+            { 
+                unencryptedText = GetRidOfDiacriticsAndSmallLetters(value);  
+                encryptedText = Encrypt(unencryptedText);  
+            } 
+        }
+        public string EncryptedText 
+        { 
+            get { return encryptedText; } 
+            set 
+            { 
+                encryptedText = value; 
+                unencryptedText = Decrypt(encryptedText);  
+            } 
+        }
+        public string? Key 
+        { 
+            get { return key; }
+            set 
+            { 
+                key = value;
+                Encrypt(unencryptedText, value);
+            } 
+        }
 
         public Sifra()
         {
@@ -73,29 +98,30 @@ namespace MiliOmega
             
         }
 
-        public string Encrypt(string text)
+        public virtual string Encrypt(string text)
         {
             return text;
         }
-        public string Encrypt(string text, string key)
+
+        public virtual string Encrypt(string text, string key)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
-                return text;
+                return Encrypt(text);
             }
 
             return text;
         }
 
-        public string Decrypt(string text)
+        public virtual string Decrypt(string text)
         {
             return text;
         }
-        public string Decrypt(string text, string key)
+        public virtual string Decrypt(string text, string key)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
-                return text;
+                return Decrypt(text);
             }
 
             return text;

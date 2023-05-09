@@ -4,7 +4,10 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Morseovka morseovka = new Morseovka();
+            morseovka.UnencryptedText = "Ahoj jak se máš? Já se mám skvěle.";
+            //morseovka.UnencryptedText = morseovka.Decrypt(morseovka.EncryptedText);
+            Console.WriteLine(morseovka.ToString());
         }
     }
 }
