@@ -10,6 +10,7 @@ namespace MiliOmega
 {
     public class Sifra
     {
+        #region Proměnné
         protected string rawText;
         protected string unencryptedText;
         protected string encryptedText;
@@ -22,7 +23,6 @@ namespace MiliOmega
             set 
             { 
                 unencryptedText = GetRidOfDiacriticsAndSmallLetters(value);  
-                encryptedText = Encrypt(unencryptedText);  
             } 
         }
         public string EncryptedText 
@@ -31,7 +31,6 @@ namespace MiliOmega
             set 
             { 
                 encryptedText = value; 
-                unencryptedText = Decrypt(encryptedText);  
             } 
         }
         public string? Key 
@@ -40,10 +39,11 @@ namespace MiliOmega
             set 
             { 
                 key = value;
-                Encrypt(unencryptedText, value);
+                EncryptedText = Encrypt(unencryptedText, value);
             } 
         }
-
+        #endregion
+        #region Konstruktory
         public Sifra()
         {
             RawText = "";
@@ -84,7 +84,7 @@ namespace MiliOmega
                 UnencryptedText = Decrypt(EncryptedText, Key);                
             }
         }
-
+        #endregion
         public override string ToString()
         {
             if(key == null)
@@ -97,7 +97,7 @@ namespace MiliOmega
             }
             
         }
-
+        #region Zašifrování
         public virtual string Encrypt(string text)
         {
             return text;
@@ -112,7 +112,8 @@ namespace MiliOmega
 
             return text;
         }
-
+        #endregion
+        #region Rozšifrování
         public virtual string Decrypt(string text)
         {
             return text;
@@ -126,7 +127,7 @@ namespace MiliOmega
 
             return text;
         }
-
+        #endregion
         public string GetRidOfDiacriticsAndSmallLetters(string input)
         {
             string output = "";
