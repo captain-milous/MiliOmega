@@ -10,12 +10,15 @@ namespace MiliOmega
     {
         private char[] abeceda = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
-        public CeaserovaSifra(string text, string key) : base(text, false)
+        public CeaserovaSifra(string text, string key)
         {
+            RawText = text;
+            UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+
             key.Replace(" ", "");
             if (key.Length == 3)
             {
-                Key = key.ToUpper();
+                Key = GetRidOfDiacriticsAndSmallLetters(key);
             }
             else
             {
@@ -24,18 +27,29 @@ namespace MiliOmega
             EncryptedText = Encrypt(UnencryptedText, Key);
         }
 
-        public CeaserovaSifra(string text, string key, bool deciphering) : base(text, deciphering)
+        public CeaserovaSifra(string text, string key, bool deciphering)
         {
+            RawText = text;
             key.Replace(" ", "");
             if (key.Length == 3)
             {
-                Key = key.ToUpper();
+                Key = GetRidOfDiacriticsAndSmallLetters(key);
             } 
             else
             {
                 Key = "A=A";
             }
-            // Dodělat!
+
+            if (!deciphering)
+            {
+                UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                EncryptedText = Encrypt(UnencryptedText, Key);
+            }
+            else
+            {
+                EncryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                UnencryptedText = Decrypt(EncryptedText, Key);
+            }
         }
 
         public virtual string Encrypt(string text, string key)
@@ -96,12 +110,57 @@ namespace MiliOmega
 
         public virtual string Decrypt(string text, string key)
         {
-            if (string.IsNullOrWhiteSpace(key) || key == "A")
+            char[] rozsifrovanyText = new char[text.Length];
+            char[] partKey = key.ToCharArray();
+            Console.WriteLine(key);
+            if (abeceda.Contains(partKey[0]) && abeceda.Contains(partKey[2]) && partKey[1].ToString() == "=")
             {
-                return Decrypt(text);
+                if (partKey[0].ToString() != partKey[2].ToString())
+                {
+                    char[] posunutaAbeceda = new char[abeceda.Length];
+                    int rozdilPismen = FindIndexInAlphabet(partKey[2].ToString()) - FindIndexInAlphabet(partKey[0].ToString());
+
+                    if (rozdilPismen < 0)
+                    {
+                        rozdilPismen = rozdilPismen + abeceda.Length;
+                    }
+                    Console.WriteLine(rozdilPismen);
+                    for (int i = 0; i < abeceda.Length; i++)
+                    {
+                        posunutaAbeceda[i] = abeceda[rozdilPismen];
+                        rozdilPismen++;
+                        if (rozdilPismen == abeceda.Length)
+                        {
+                            rozdilPismen = 0;
+                        }
+                    }
+                    // změnit
+                    for (int i = 0; i < text.Length; i++)
+                    {
+                        char pismeno = text[i];
+                        int index = Array.IndexOf(posunutaAbeceda, pismeno);
+
+                        if (index == -1)
+                        {
+                            rozsifrovanyText[i] = pismeno;
+                        }
+                        else
+                        {
+                            rozsifrovanyText[i] = abeceda[index];
+                        }
+                    }
+                }
+                else
+                {
+                    return GetRidOfDiacriticsAndSmallLetters(text);
+                }
+            }
+            else
+            {
+                return "Neplatný klíč!";
             }
 
-            return text;
+            return new string(rozsifrovanyText);
         }
 
         public int FindIndexInAlphabet(string input)
