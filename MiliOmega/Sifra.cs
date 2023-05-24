@@ -16,8 +16,8 @@ namespace MiliOmega
         protected string encryptedText;
         protected string? key;
 
-        public string RawText { get { return rawText; } set { rawText = value; } }
-        public string UnencryptedText 
+        protected string RawText { get { return rawText; } set { rawText = value; } }
+        protected string UnencryptedText 
         { 
             get { return unencryptedText; } 
             set 
@@ -25,7 +25,7 @@ namespace MiliOmega
                 unencryptedText = GetRidOfDiacriticsAndSmallLetters(value);  
             } 
         }
-        public string EncryptedText 
+        protected string EncryptedText 
         { 
             get { return encryptedText; } 
             set 
@@ -33,7 +33,7 @@ namespace MiliOmega
                 encryptedText = value; 
             } 
         }
-        public string? Key 
+        protected string? Key 
         { 
             get { return key; }
             set 
@@ -44,7 +44,7 @@ namespace MiliOmega
         }
         #endregion
         #region Konstruktory
-        public Sifra()
+        protected Sifra()
         {
             RawText = "";
             UnencryptedText = string.Empty;
@@ -52,7 +52,7 @@ namespace MiliOmega
             Key = null;
         }
 
-        public Sifra(string text, bool deciphering)
+        protected Sifra(string text, bool deciphering)
         {
             RawText = text;
             Key = null;
@@ -68,7 +68,7 @@ namespace MiliOmega
                 UnencryptedText = Decrypt(EncryptedText);
             }
         }
-        public Sifra(string text, string key, bool deciphering)
+        protected Sifra(string text, string key, bool deciphering)
         {
             RawText = text;
             Key = key;
@@ -114,10 +114,21 @@ namespace MiliOmega
         }
         #endregion
         #region Rozšifrování
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public virtual string Decrypt(string text)
         {
             return text;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public virtual string Decrypt(string text, string key)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -128,6 +139,11 @@ namespace MiliOmega
             return text;
         }
         #endregion
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public string GetRidOfDiacriticsAndSmallLetters(string input)
         {
             string output = "";
@@ -150,6 +166,50 @@ namespace MiliOmega
 
             output = stringBuilder.ToString();
             return output;
+        }
+
+        protected char[] abeceda = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+
+        protected int FindIndexInAlphabet(string input)
+        {
+            // Convert the input to uppercase to ensure case insensitivity
+            input = input.ToUpper();
+
+            for (int i = 0; i < abeceda.Length; i++)
+            {
+                if (abeceda[i].ToString() == input)
+                {
+                    return i;
+                }
+            }
+
+            // If the input is not found in the alphabet, return -1 (or any other suitable value)
+            return -1;
+        }
+
+        protected int ChangeToNum(string input)
+        {
+            input = input.ToUpper();
+
+            for (int i = 0; i < abeceda.Length; i++)
+            {
+                if (abeceda[i].ToString() == input)
+                {
+                    return i + 1;
+                }
+            }
+            return -1;
+        }
+
+        protected string ChangeToChar(int input)
+        {
+            if (input > 0 && input <= abeceda.Length)
+            {
+                input--;
+                return abeceda[input].ToString();
+            }
+
+            return string.Empty;
         }
 
     }

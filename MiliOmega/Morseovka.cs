@@ -9,13 +9,30 @@ namespace MiliOmega
     public class Morseovka : Sifra
     {
         #region Konstruktory
-        public Morseovka() : base(){ }
-        public Morseovka(string text) : base(text, false) { }
-        public Morseovka(string text, bool deciphering) : base(text, deciphering) { }
-        public Morseovka(string text, string key, bool deciphering) : base(text, deciphering)
-        {
+        public Morseovka(string text)
+        { 
+            RawText = text;
             Key = null;
+            UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+            EncryptedText = Encrypt(UnencryptedText);
         }
+        public Morseovka(string text, bool deciphering) : base(text, deciphering) 
+        {
+            RawText = text;
+            Key = null;
+
+            if (!deciphering)
+            {
+                UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                EncryptedText = Encrypt(UnencryptedText);
+            }
+            else
+            {
+                EncryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                UnencryptedText = Decrypt(EncryptedText);
+            }
+        }
+        
         #endregion
         public override string ToString()
         {

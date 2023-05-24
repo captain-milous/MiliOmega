@@ -8,7 +8,6 @@ namespace MiliOmega
 {
     public class CeaserovaSifra : Sifra
     {
-        private char[] abeceda = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
         public CeaserovaSifra(string text, string key)
         {
@@ -50,6 +49,11 @@ namespace MiliOmega
                 EncryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
                 UnencryptedText = Decrypt(EncryptedText, Key);
             }
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
 
         public virtual string Encrypt(string text, string key)
@@ -163,22 +167,6 @@ namespace MiliOmega
             return new string(rozsifrovanyText);
         }
 
-        public int FindIndexInAlphabet(string input)
-        {
-            // Convert the input to uppercase to ensure case insensitivity
-            input = input.ToUpper();
-
-            for (int i = 0; i < abeceda.Length; i++)
-            {
-                if (abeceda[i].ToString() == input)
-                {
-                    return i;
-                }
-            }
-
-            // If the input is not found in the alphabet, return -1 (or any other suitable value)
-            return -1;
-        }
 
     }
 }
