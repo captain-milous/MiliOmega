@@ -55,42 +55,23 @@ namespace MiliOmega
                 }
             }
 
-            string encryptedText = String.Join("", encryptedList) + "||";
+            string encryptedText = String.Join("", encryptedList);
             return encryptedText;
         }
 
         public override string Decrypt(string text)
         {
-            //dodělat
-            return "";
-        }
-
-        public int ChangeToNum(string input)
-        {
-            // Convert the input to uppercase to ensure case insensitivity
-            input = input.ToUpper();
-
-            for (int i = 0; i < abeceda.Length; i++)
+            List<string> encryptedList = text.Split("").ToList(); ;
+            string decryptedText = "";
+            foreach (char c in text)
             {
-                if (abeceda[i].ToString() == input)
-                {
-                    return i + 1;
-                }
+                //dodělat!!
             }
-
-            // If the input is not found in the alphabet, return -1 (or any other suitable value)
-            return -1;
+            return decryptedText;
         }
 
-        public string ChangeToChar(int input)
-        {
-            if(input > 0 && input <= abeceda.Length)
-            {
-                input--;
-                return abeceda[input].ToString();
-            }
+        
 
-            return string.Empty;
-        }
+        
     }
 }
