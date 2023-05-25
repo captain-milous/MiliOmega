@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -17,14 +18,16 @@ namespace MiliOmega
         protected string? key;
 
         protected string RawText { get { return rawText; } set { rawText = value; } }
+        
         protected string UnencryptedText 
         { 
             get { return unencryptedText; } 
             set 
             { 
-                unencryptedText = GetRidOfDiacriticsAndSmallLetters(value);  
+                unencryptedText = SimplifyRawText(value);  
             } 
         }
+        
         protected string EncryptedText 
         { 
             get { return encryptedText; } 
@@ -33,13 +36,13 @@ namespace MiliOmega
                 encryptedText = value; 
             } 
         }
+        
         protected string? Key 
         { 
             get { return key; }
             set 
             { 
                 key = value;
-                EncryptedText = Encrypt(unencryptedText, value);
             } 
         }
         #endregion
@@ -59,7 +62,7 @@ namespace MiliOmega
 
             if (!deciphering)
             {
-                UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                UnencryptedText = SimplifyRawText(RawText);
                 EncryptedText = Encrypt(UnencryptedText);
             }
             else
@@ -75,7 +78,7 @@ namespace MiliOmega
 
             if (!deciphering)
             {
-                UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                UnencryptedText = SimplifyRawText(RawText);
                 EncryptedText = Encrypt(UnencryptedText, Key);
             }
             else
@@ -85,6 +88,12 @@ namespace MiliOmega
             }
         }
         #endregion
+
+        public string GetRawText() { return rawText; }
+        public string GetUnencryptedText() { return unencryptedText; }
+        public string GetEncryptedText() { return encryptedText; }
+        public string? GetKey() { return key; }
+
         public override string ToString()
         {
             if(key == null)
@@ -144,7 +153,7 @@ namespace MiliOmega
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public string GetRidOfDiacriticsAndSmallLetters(string input)
+        public string SimplifyRawText(string input)
         {
             string output = "";
             if (string.IsNullOrWhiteSpace(input))

@@ -12,7 +12,7 @@ namespace MiliOmega
         {
             RawText = text;
             Key = null;
-            UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+            UnencryptedText = SimplifyRawText(RawText);
             EncryptedText = Encrypt(UnencryptedText);
         }
         public Mezerova(string text, bool deciphering)
@@ -22,12 +22,12 @@ namespace MiliOmega
 
             if (!deciphering)
             {
-                UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                UnencryptedText = SimplifyRawText(RawText);
                 EncryptedText = Encrypt(UnencryptedText);
             }
             else
             {
-                EncryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                EncryptedText = SimplifyRawText(RawText);
                 UnencryptedText = Decrypt(EncryptedText);
             }
         }

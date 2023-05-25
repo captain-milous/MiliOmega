@@ -12,12 +12,12 @@ namespace MiliOmega
         public CeaserovaSifra(string text, string key)
         {
             RawText = text;
-            UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+            UnencryptedText = SimplifyRawText(RawText);
 
             key.Replace(" ", "");
             if (key.Length == 3)
             {
-                Key = GetRidOfDiacriticsAndSmallLetters(key);
+                Key = SimplifyRawText(key);
             }
             else
             {
@@ -32,7 +32,7 @@ namespace MiliOmega
             key.Replace(" ", "");
             if (key.Length == 3)
             {
-                Key = GetRidOfDiacriticsAndSmallLetters(key);
+                Key = SimplifyRawText(key);
             } 
             else
             {
@@ -41,12 +41,12 @@ namespace MiliOmega
 
             if (!deciphering)
             {
-                UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                UnencryptedText = SimplifyRawText(RawText);
                 EncryptedText = Encrypt(UnencryptedText, Key);
             }
             else
             {
-                EncryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                EncryptedText = SimplifyRawText(RawText);
                 UnencryptedText = Decrypt(EncryptedText, Key);
             }
         }
@@ -155,7 +155,7 @@ namespace MiliOmega
                 }
                 else
                 {
-                    return GetRidOfDiacriticsAndSmallLetters(text);
+                    return SimplifyRawText(text);
                 }
             }
             else

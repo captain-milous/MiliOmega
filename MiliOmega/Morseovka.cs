@@ -13,7 +13,7 @@ namespace MiliOmega
         { 
             RawText = text;
             Key = null;
-            UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+            UnencryptedText = SimplifyRawText(RawText);
             EncryptedText = Encrypt(UnencryptedText);
         }
         public Morseovka(string text, bool deciphering) : base(text, deciphering) 
@@ -23,12 +23,12 @@ namespace MiliOmega
 
             if (!deciphering)
             {
-                UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                UnencryptedText = SimplifyRawText(RawText);
                 EncryptedText = Encrypt(UnencryptedText);
             }
             else
             {
-                EncryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
+                EncryptedText = SimplifyRawText(RawText);
                 UnencryptedText = Decrypt(EncryptedText);
             }
         }
