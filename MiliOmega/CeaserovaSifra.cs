@@ -70,7 +70,6 @@ namespace MiliOmega
                     {
                         rozdilPismen = rozdilPismen + abeceda.Length;
                     }
-                    Console.WriteLine(rozdilPismen);
                     for (int i = 0; i < abeceda.Length; i++)
                     {
                         posunutaAbeceda[i] = abeceda[rozdilPismen];

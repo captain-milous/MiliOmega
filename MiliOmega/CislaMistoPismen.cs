@@ -9,14 +9,14 @@ namespace MiliOmega
     public class CislaMistoPismen : Sifra
     {
 
-        public CislaMistoPismen(string text) : base(text, false) 
+        public CislaMistoPismen(string text)
         {
             RawText = text;
             Key = null;
             UnencryptedText = GetRidOfDiacriticsAndSmallLetters(RawText);
             EncryptedText = Encrypt(UnencryptedText);
         }
-        public CislaMistoPismen(string text, bool deciphering) : base(text, deciphering) 
+        public CislaMistoPismen(string text, bool deciphering) 
         {
             RawText = text;
             Key = null;
@@ -49,25 +49,48 @@ namespace MiliOmega
                     int znak = ChangeToNum(c.ToString());
                     encryptedList.Add(znak.ToString());
                 } 
+                else if (c.ToString() == " ")
+                {
+                    // adds nothing
+                }
                 else
                 {
                     encryptedList.Add(c.ToString());
                 }
             }
 
-            string encryptedText = String.Join("", encryptedList);
+            string encryptedText = String.Join(" ", encryptedList);
             return encryptedText;
         }
 
         public override string Decrypt(string text)
         {
-            List<string> encryptedList = text.Split("").ToList(); ;
-            string decryptedText = "";
-            foreach (char c in text)
+            List<string> encryptedList = text.Split(" ").ToList();
+            StringBuilder decryptedText = new StringBuilder();
+
+            foreach (string encryptedChar in encryptedList)
             {
-                //dodělat!!
+                if (int.TryParse(encryptedChar, out int index))
+                {
+                    if (index >= 1 && index <= abeceda.Length)
+                    {
+                        char decryptedChar = abeceda[index - 1];
+                        decryptedText.Append(decryptedChar);
+                    }
+                    else
+                    {
+                        // Handle invalid index (out of range)
+                        decryptedText.Append("?");
+                    }
+                }
+                else
+                {
+                    // Handle non-numeric characters (special characters)
+                    decryptedText.Append(encryptedChar);
+                }
             }
-            return decryptedText;
+
+            return decryptedText.ToString();
         }
 
         
