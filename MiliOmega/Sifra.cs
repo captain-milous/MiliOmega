@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
+
 namespace MiliOmega
 {
     public class Sifra
@@ -17,6 +18,9 @@ namespace MiliOmega
         protected string encryptedText;
         protected string? key;
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected string RawText { get { return rawText; } set { rawText = value; } }
         
         protected string UnencryptedText 
