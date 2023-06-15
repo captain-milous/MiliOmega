@@ -92,9 +92,35 @@ namespace MiliOmega
 
             return decryptedText.ToString();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        protected int ChangeToNum(string input)
+        {
+            input = input.ToUpper();
 
-        
+            for (int i = 0; i < abeceda.Length; i++)
+            {
+                if (abeceda[i].ToString() == input)
+                {
+                    return i + 1;
+                }
+            }
+            return -1;
+        }
 
-        
+        protected string ChangeToChar(int input)
+        {
+            if (input > 0 && input <= abeceda.Length)
+            {
+                input--;
+                return abeceda[input].ToString();
+            }
+
+            return string.Empty;
+        }
+
     }
 }

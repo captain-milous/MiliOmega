@@ -8,7 +8,11 @@ namespace MiliOmega
 {
     public class CeaserovaSifra : Sifra
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="key"></param>
         public CeaserovaSifra(string text, string key)
         {
             RawText = text;
@@ -25,7 +29,12 @@ namespace MiliOmega
             }
             EncryptedText = Encrypt(UnencryptedText, Key);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="key"></param>
+        /// <param name="deciphering"></param>
         public CeaserovaSifra(string text, string key, bool deciphering)
         {
             RawText = text;
@@ -56,7 +65,7 @@ namespace MiliOmega
             return base.ToString();
         }
 
-        public virtual string Encrypt(string text, string key)
+        public override string Encrypt(string text, string key)
         {
             char[] zasifrovanyText = new char[text.Length];
             char[] partKey = key.ToCharArray();
@@ -111,7 +120,7 @@ namespace MiliOmega
             return new string(zasifrovanyText);
         }
 
-        public virtual string Decrypt(string text, string key)
+        public override string Decrypt(string text, string key)
         {
             char[] rozsifrovanyText = new char[text.Length];
             char[] partKey = key.ToCharArray();

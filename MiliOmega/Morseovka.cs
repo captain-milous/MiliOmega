@@ -9,6 +9,10 @@ namespace MiliOmega
     public class Morseovka : Sifra
     {
         #region Konstruktory
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
         public Morseovka(string text)
         { 
             RawText = text;
@@ -16,6 +20,11 @@ namespace MiliOmega
             UnencryptedText = SimplifyRawText(RawText);
             EncryptedText = Encrypt(UnencryptedText);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="deciphering"></param>
         public Morseovka(string text, bool deciphering) : base(text, deciphering) 
         {
             RawText = text;
@@ -32,35 +41,30 @@ namespace MiliOmega
                 UnencryptedText = Decrypt(EncryptedText);
             }
         }
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         #endregion
         public override string ToString()
         {
             return base.ToString();
         }
         #region Morseovka
-        private Dictionary<char, string> morseCodeDictionary = new Dictionary<char, string>()
-            {
-                {'A', ".-"}, {'B', "-..."}, {'C', "-.-."}, {'D', "-.."}, {'E', "."},
-                {'F', "..-."}, {'G', "--."}, {'H', "...."}, {'I', ".."}, {'J', ".---"},
-                {'K', "-.-"}, {'L', ".-.."}, {'M', "--"}, {'N', "-."}, {'O', "---"},
-                {'P', ".--."}, {'Q', "--.-"}, {'R', ".-."}, {'S', "..."}, {'T', "-"},
-                {'U', "..-"}, {'V', "...-"}, {'W', ".--"}, {'X', "-..-"}, {'Y', "-.--"},
-                {'Z', "--.."}, {'0', "-----"}, {'1', ".----"}, {'2', "..---"}, {'3', "...--"},
-                {'4', "....-"}, {'5', "....."}, {'6', "-...."}, {'7', "--..."}, {'8', "---.."},
-                {'9', "----."}
-            };
-        private Dictionary<string, char> morseCodeDictionaryRev = new Dictionary<string, char>()
-            {
-                {".-", 'A'}, {"-...", 'B'}, {"-.-.", 'C'}, {"-..", 'D'}, {".", 'E'},
-                {"..-.", 'F'}, {"--.", 'G'}, {"....", 'H'}, {"..", 'I'}, {".---", 'J'},
-                {"-.-", 'K'}, {".-..", 'L'}, {"--", 'M'}, {"-.", 'N'}, {"---", 'O'},
-                {".--.", 'P'}, {"--.-", 'Q'}, {".-.", 'R'}, {"...", 'S'}, {"-", 'T'},
-                {"..-", 'U'}, {"...-", 'V'}, {".--", 'W'}, {"-..-", 'X'}, {"-.--", 'Y'},
-                {"--..", 'Z'}, {"-----", '0'}, {".----", '1'}, {"..---", '2'}, {"...--", '3'},
-                {"....-", '4'}, {".....", '5'}, {"-....", '6'}, {"--...", '7'}, {"---..", '8'},
-                {"----.", '9'}, {"|", ' '}
-            };
+        /// <summary>
+        /// 
+        /// </summary>
+        private Dictionary<char, string> morseCodeDict = new Dictionary<char, string>()
+        {
+            {'A', ".-"}, {'B', "-..."}, {'C', "-.-."}, {'D', "-.."}, {'E', "."},
+            {'F', "..-."}, {'G', "--."}, {'H', "...."}, {'I', ".."}, {'J', ".---"},
+            {'K', "-.-"}, {'L', ".-.."}, {'M', "--"}, {'N', "-."}, {'O', "---"},
+            {'P', ".--."}, {'Q', "--.-"}, {'R', ".-."}, {'S', "..."}, {'T', "-"}, 
+            {'U', "..-"}, {'V', "...-"}, {'W', ".--"}, {'X', "-..-"}, {'Y', "-.--"},
+            {'Z', "--.."}, {'0', "-----"}, {'1', ".----"}, {'2', "..---"}, {'3', "...--"},
+            {'4', "....-"}, {'5', "....."}, {'6', "-...."}, {'7', "--..."}, {'8', "---.."},
+            {'9', "----."}, {' ', "|"} // mezera
+        };
         #endregion
         /// <summary>
         /// 
@@ -69,17 +73,18 @@ namespace MiliOmega
         /// <returns></returns>
         public override string Encrypt(string text)
         {
-            List<string> morseCodeList = new List<string>();
-            foreach (char c in text)
+            StringBuilder encryptedText = new StringBuilder();
+
+            foreach (char c in text.ToUpper())
             {
-                if (morseCodeDictionary.ContainsKey(c))
+                if (morseCodeDict.ContainsKey(c))
                 {
-                    morseCodeList.Add(morseCodeDictionary[c]);
+                    encryptedText.Append(morseCodeDict[c]);
+                    encryptedText.Append("|"); // oddělovač mezi písmeny
                 }
             }
 
-            string encryptedText = String.Join("|", morseCodeList) + "||";
-            return encryptedText;
+            return encryptedText.ToString();
 
         }
         /// <summary>
@@ -89,16 +94,28 @@ namespace MiliOmega
         /// <returns></returns>
         public override string Decrypt(string text)
         {
-            List<string> morseCodeList = text.Split('|').ToList();
-            string decryptedText = "";
-            foreach (string morseCode in morseCodeList)
+            StringBuilder decryptedText = new StringBuilder();
+
+            string[] morseCodeWords = text.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string word in morseCodeWords)
             {
-                if (morseCodeDictionaryRev.ContainsKey(morseCode))
+                string[] morseCodeLetters = word.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string letter in morseCodeLetters)
                 {
-                    decryptedText += morseCodeDictionaryRev[morseCode];
+                    var morseCodeLetter = morseCodeDict.FirstOrDefault(x => x.Value == letter);
+
+                    if (!string.IsNullOrEmpty(morseCodeLetter.Value))
+                    {
+                        decryptedText.Append(morseCodeLetter.Key);
+                    }
                 }
+
+                decryptedText.Append(" "); // mezera mezi slovy
             }
-            return decryptedText;
+
+            return decryptedText.ToString();
         }
         
 

@@ -7,14 +7,15 @@
             string test = "Ahoj tohle je zkušební text!";
             string test2 = "Tohle je drůhý test!";
 
+            /*
             Console.WriteLine("Morseovka");
-
+            
             Morseovka morseovka = new Morseovka(test);
             Console.WriteLine(morseovka.ToString());
             test2 = "-|---|....|.-..|.||.---|.||-..|.-.|..-|....|-.--||-|.|...|-|||";
             morseovka = new Morseovka(test2, true);
             Console.WriteLine(morseovka.ToString());
-
+            
             Console.WriteLine();
             Console.WriteLine("Ceaserova Sifra");
 
@@ -41,10 +42,26 @@
             test2 = "SU NP GI KM DF IK DF CE QS TV GI XZ SU DF RT SU !";
             mez = new Mezerova(test2, true);
             Console.WriteLine(mez.ToString());
+            
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            */
+            string oddelovac = "\n----------------------------------------------------------------------------------\n";
+            Console.WriteLine(oddelovac);
+            Console.WriteLine("Vítejte v programu pro šifrování textu 1.0!");
+            Console.WriteLine("Autor: Miloš Tesař C3b");
+            Console.WriteLine(oddelovac);
+
+            new UserHandler("localhost", "SPSEJecna", "miliomega", "Heslo1234");
 
             Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Konec Programu");
+            Console.WriteLine(oddelovac);
 
-            //Mezerova
         }
     }
 }
